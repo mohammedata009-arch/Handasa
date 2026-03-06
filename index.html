@@ -2,174 +2,155 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار الميكانيكا - إعداد محمد طه</title>
+    <title>مراجعة العلوم الهندسية - إشراف محمد طه</title>
     <style>
-        :root {
-            --primary: #1e293b;
-            --secondary: #d4af37;
-            --success: #10b981;
-            --danger: #ef4444;
-            --light: #f8fafc;
-        }
-        
+        :root { --primary: #1e293b; --gold: #d4af37; --bg: #f8fafc; }
         body { 
-            font-family: 'Segoe UI', Tahoma, sans-serif; 
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            min-height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; 
-            user-select: none; -webkit-user-select: none; /* حماية المحتوى */
+            font-family: 'Simplified Arabic', 'Segoe UI', sans-serif; 
+            background: #0f172a; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            user-select: none; -webkit-user-select: none;
         }
-
-        .quiz-container { 
-            background: white; width: 95%; max-width: 700px; padding: 30px; 
-            border-radius: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
-            position: relative;
+        .quiz-card { 
+            background: white; width: 95%; max-width: 750px; padding: 35px; border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); border-top: 10px solid var(--gold);
         }
-
-        /* تنسيق الصور التوضيحية */
-        .vector-box { 
-            width: 100%; height: 150px; background: #f1f5f9; 
-            border-radius: 15px; margin-bottom: 20px; 
-            display: flex; justify-content: center; align-items: center;
-        }
-
-        h1 { color: var(--primary); font-size: 1.6em; margin-bottom: 5px; text-align: center; }
-        .subtitle { text-align: center; color: #64748b; font-weight: bold; margin-bottom: 10px; }
-
-        .progress-bar { height: 10px; background: #eee; border-radius: 5px; margin: 20px 0; overflow: hidden; }
-        #progress { height: 100%; background: var(--secondary); width: 0%; transition: 0.4s; }
-
-        .question { font-size: 1.25em; font-weight: bold; margin-bottom: 20px; color: #334155; line-height: 1.5; }
-        .options { display: grid; gap: 12px; }
-        .option-btn { 
-            padding: 15px; border: 2px solid #e2e8f0; background: var(--light); 
-            border-radius: 12px; cursor: pointer; transition: 0.3s; text-align: right; 
-            font-size: 1.1em; color: #1e293b; font-weight: 500;
-        }
-        .option-btn:hover { border-color: var(--secondary); background: #fffcf0; transform: translateY(-2px); }
-
-        .feedback { 
-            margin-top: 20px; padding: 18px; border-radius: 12px; display: none; 
-            font-weight: bold; border-right: 6px solid; line-height: 1.4;
-        }
-        .correct { background: #dcfce7; color: #166534; border-color: #22c55e; }
-        .wrong { background: #fee2e2; color: #991b1b; border-color: #ef4444; }
-
-        #next-btn { 
-            width: 100%; padding: 16px; background: var(--primary); color: white; 
-            border: none; border-radius: 12px; margin-top: 20px; cursor: pointer; 
-            font-weight: bold; font-size: 1.1em; transition: 0.3s;
-        }
-        #next-btn:hover { background: #334155; }
+        h1 { color: var(--primary); text-align: center; font-size: 2em; margin-bottom: 5px; }
+        .instructor { text-align: center; color: var(--gold); font-weight: bold; margin-bottom: 25px; font-size: 1.2em; }
         
-        #result-screen { display: none; text-align: center; padding: 40px 20px; }
+        .progress-container { height: 10px; background: #e2e8f0; border-radius: 5px; margin-bottom: 30px; overflow: hidden; }
+        #progress-bar { height: 100%; background: linear-gradient(to left, var(--gold), #b8860b); width: 0%; transition: 0.5s; }
+
+        .visual-box { 
+            background: #f1f5f9; border: 2px dashed #cbd5e1; height: 160px; 
+            margin-bottom: 25px; display: flex; justify-content: center; align-items: center; border-radius: 15px;
+        }
+
+        .question-text { font-size: 1.4em; font-weight: bold; color: #1e293b; margin-bottom: 25px; line-height: 1.6; }
+        .options-grid { display: grid; gap: 15px; }
+        .opt-btn { 
+            padding: 18px; border: 2px solid #e2e8f0; background: white; border-radius: 15px; 
+            cursor: pointer; text-align: right; font-size: 1.2em; transition: 0.3s; font-weight: 500;
+        }
+        .opt-btn:hover { border-color: var(--gold); background: #fffcf0; transform: translateY(-3px); }
+        
+        .feedback { margin-top: 25px; padding: 20px; border-radius: 12px; display: none; font-weight: bold; font-size: 1.1em; }
+        .correct { background: #dcfce7; color: #166534; border-right: 6px solid #22c55e; }
+        .wrong { background: #fee2e2; color: #991b1b; border-right: 6px solid #ef4444; }
+
+        #action-btn { 
+            width: 100%; padding: 18px; background: var(--primary); color: white; border: none; 
+            border-radius: 15px; margin-top: 25px; cursor: pointer; font-size: 1.2em; display: none; font-weight: bold;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-<div class="quiz-container">
-    <div id="quiz-content">
-        <h1>اختبار الميكانيكا التفاعلي 📐</h1>
-        <div class="subtitle">إشراف الأستاذ: محمد طه عطا المنان</div>
+<div class="quiz-card">
+    <div id="quiz-ui">
+        <h1>اختبار العلوم الهندسية (الميكانيكا)</h1>
+        <div class="instructor">إعداد المهندس: محمد طه عطا المنان</div>
         
-        <div class="progress-bar"><div id="progress"></div></div>
+        <div class="progress-container"><div id="progress-bar"></div></div>
         
-        <div id="visual-aid" class="vector-box" style="display:none;"></div>
+        <div id="image-area" class="visual-box" style="display:none;"></div>
         
-        <div class="question" id="q-text"></div>
-        <div class="options" id="q-options"></div>
+        <div class="question-text" id="q-text"></div>
+        <div class="options-grid" id="q-options"></div>
+        
         <div id="feedback" class="feedback"></div>
-        <button id="next-btn" onclick="nextQuestion()" style="display:none;">السؤال التالي ⮕</button>
+        <button id="action-btn" onclick="handleNext()">السؤال التالي ⬅</button>
     </div>
 
-    <div id="result-screen">
-        <h2 style="color: var(--secondary); font-size: 2.2em;">إنجاز رائع! 🏆</h2>
-        <div id="score-text" style="font-size: 2.5em; margin: 20px 0; font-weight: bold; color: var(--primary);"></div>
-        <p style="font-size: 1.2em; color: #475569;">أيها المتدربون، لقد أظهرتم فهماً عميقاً للقوى والمتجهات والعزوم.</p>
-        <button id="next-btn" onclick="location.reload()">إعادة المحاولة</button>
+    <div id="result-ui" style="display:none; text-align:center;">
+        <h2 style="color:var(--gold); font-size: 2.5em;">أحسنتم يا متدربين! 🏆</h2>
+        <div id="final-score" style="font-size: 4em; margin: 25px 0; font-weight: bold; color: var(--primary);"></div>
+        <p style="font-size: 1.4em; color: #475569;">لقد أكملتم مراجعة مقرر الشهادة الثانوية بنجاح.</p>
+        <button onclick="location.reload()" style="padding:15px 40px; border-radius:12px; cursor:pointer; font-weight:bold; background:var(--gold); border:none; color:white; font-size:1.1em; margin-top:20px;">إعادة الاختبار</button>
     </div>
 </div>
 
 <script>
     const questions = [
-        { q: "ما هو الرمز الرياضي المتعارف عليه لمتجه القوة؟", opts: ["m", "v", "F"], ans: 2, exp: "صحيح، الرمز F يشير إلى Force (القوة)." },
-        { q: "عند تمثيل المتجه بيانياً، ماذا يمثل طول السهم؟", opts: ["الاتجاه", "نقطة التأثير", "المقدار"], ans: 2, exp: "أحسنتم يا متدربين، طول السهم يتناسب طردياً مع مقدار الكمية." },
-        { q: "وحدة قياس عزم القوة في النظام الدولي هي:", opts: ["N/m", "N.m", "N/m²"], ans: 1, exp: "العزم هو حاصل ضرب القوة في ذراعها، لذا الوحدة نيوتن.متر." },
-        { q: "في الرسم الموضح، ما هي محصلة القوتين؟", opts: ["10N يميناً", "صفر (اتزان)", "20N يساراً"], ans: 1, exp: "بما أن القوتين متساويتين ومتضادتين، فإن المحصلة صفر.", svg: 'balance' },
-        { q: "تعتبر القوة كمية متجهة لأن لها:", opts: ["مقداراً فقط", "اتجاهاً فقط", "مقداراً واتجاهاً"], ans: 2, exp: "رائع، الكميات المتجهة تفتقر للمعنى بدون تحديد الاتجاه." },
-        { q: "متى تنعدم قيمة العزم رغم وجود قوة مؤثرة؟", opts: ["عندما تكون القوة عمودية", "عندما تمر القوة بمحور الدوران", "عندما تكون القوة مائلة"], ans: 1, exp: "إذا انعدم ذراع القوة (البعد)، ينعدم العزم تماماً." },
-        { q: "محصلة قوتين (6N و 8N) بينهما زاوية قائمة تساوي:", opts: ["14N", "2N", "10N"], ans: 2, exp: "باستخدام فيثاغورس: √(6²+8²) = 10." },
-        { q: "ماذا يسمى تأثير قوتين متساويتين ومتوازيتين وفي اتجاهين متضادين؟", opts: ["محصلة", "ازدواج", "ضغط"], ans: 1, exp: "هذا هو 'الازدواج' الذي يسبب دوراناً فقط بدون إزاحة." },
-        { q: "في المتجه A = 5 units بزاوية 0°، تكون المركبة الرأسية (Ay) تساوي:", opts: ["5", "2.5", "صفر"], ans: 2, exp: "بما أن المتجه أفقي تماماً، فلا توجد له مركبة رأسية." },
-        { q: "تزداد سهولة فتح الباب كلما كان مقبض الباب:", opts: ["قريباً من المفصلات", "بعيداً عن المفصلات", "صغيراً جداً"], ans: 1, exp: "كلما زاد طول ذراع القوة، زاد العزم وقل الجهد المطلوب." },
-        { q: "أي من الكميات التالية ليست متجهة؟", opts: ["السرعة المتجهة", "الكتلة", "الوزن"], ans: 1, exp: "الكتلة كمية قياسية لا تعتمد على الاتجاه." },
-        { q: "عند تحليل متجه القوة المائل بزاوية θ، فإن المركبة الأفقية هي:", opts: ["F sin θ", "F cos θ", "F tan θ"], ans: 1, exp: "المركبة القريبة من الزاوية تأخذ جيب التمام (Cos)." },
-        { q: "الجهاز المستخدم لقياس مقدار القوة هو:", opts: ["الميزان ذو الكفتين", "الميزان الزنبركي", "الترمومتر"], ans: 1, exp: "الميزان الزنبركي (اللولبي) يقيس القوة بالنيوتن." },
-        { q: "إذا كانت المحصلة تساوي صفراً، فإن الجسم يكون في حالة:", opts: ["تسارع", "اتزان", "سقوط حر"], ans: 1, exp: "الاتزان يعني أن مجموع القوى المؤثرة يتلاشى." },
-        { q: "ما هو اتجاه عزم القوة إذا كان الدوران عكس عقارب الساعة؟", opts: ["للداخل", "للخارج (موجب)", "لليمين"], ans: 1, exp: "حسب قاعدة اليد اليمنى، الدوران عكس العقارب يعتبر موجباً." }
+        { q: "ما هي وحدة قياس القوة (ق) في النظام الدولي؟", opts: ["جول", "نيوتن", "وات"], ans: 1, exp: "أحسنتم يا متدربين، النيوتن هو وحدة قياس القوة." },
+        { q: "كمية فيزيائية لها مقدار واتجاه تسمى كمية:", opts: ["قياسية", "أساسية", "متجهة"], ans: 2, exp: "صحيح، المتجهات هي أساس دراسة الميكانيكا الهندسية." },
+        { q: "محصلة قوتين (ح) تعملان في نفس الخط وفي اتجاهين متضادين تساوي:", opts: ["مجموعهما", "الفرق بينهما", "جذرهما"], ans: 1, exp: "ممتاز، نطرح القوة الأصغر من الأكبر." },
+        { q: "عزم القوة (ع) حول نقطة يساوي حاصل ضرب القوة في:", opts: ["الزمن", "ذراعها (البعد العمودي)", "السرعة"], ans: 1, exp: "قانون العزم: ع = ق × ف." },
+        { q: "يقاس عزم القوة بوحدة:", opts: ["نيوتن/متر", "نيوتن.متر", "كيلوجرام/متر"], ans: 1, exp: "الوحدة هي نيوتن مضروب في المتر (ن.م)." },
+        { q: "تكون القوتان في حالة (ازدواج) إذا كانتا متساويتين في المقدار و:", opts: ["لهما نفس الاتجاه", "متضادتين وليس لهما خط عمل واحد", "متعامدتين"], ans: 1, exp: "الازدواج يسبب دوراناً للجسم دون إزاحة." },
+        { q: "في الرسم: قوة 50 نيوتن تميل بزاوية 60° على الأفقي. المركبة الأفقية (ق س) تساوي:", opts: ["50 جتا 60°", "50 جا 60°", "50 ظا 60°"], ans: 0, exp: "المركبة القريبة من الزاوية تأخذ جيب التمام (جتا).", svg: 'vector' },
+        { q: "إذا كانت محصلة القوى المؤثرة على جسم تساوي صفراً، فإن الجسم يكون في حالة:", opts: ["تسارع", "اتزان", "سقوط حر"], ans: 1, exp: "شرط الاتزان هو أن تكون ح = صفر." },
+        { q: "ما هي محصلة قوتين متعامدتين مقدار كل منهما 3 نيوتن و 4 نيوتن؟", opts: ["7 نيوتن", "1 نيوتن", "5 نيوتن"], ans: 2, exp: "نطبق فيثاغورس: ح = √(3² + 4²) = 5 نيوتن." },
+        { q: "النقطة التي يتركز فيها وزن الجسم وتؤثر فيها الجاذبية تسمى:", opts: ["نقطة التلاشي", "مركز الثقل", "نقطة التحليل"], ans: 1, exp: "أحسنتم، مركز الثقل هو نقطة الارتكاز التوازني للجسم." },
+        { q: "عزم الازدواج يساوي حاصل ضرب إحدى القوتين في:", opts: ["نصف المسافة", "المسافة العمودية بينهما", "مربع المسافة"], ans: 1, exp: "عزم الازدواج = ق × ل (حيث ل هي ذراع الازدواج)." },
+        { q: "الرمز (جـ) في مسائل الميكانيكا الهندسية يرمز غالباً إلى:", opts: ["القوة", "عجلة الجاذبية", "الكتلة"], ans: 1, exp: "جـ هي عجلة الجاذبية (9.8 أو 10 م/ث²)." },
+        { q: "يُعتبر العزم سالباً إذا كان اتجاه الدوران:", opts: ["عكس عقارب الساعة", "مع عقارب الساعة", "نحو المركز"], ans: 1, exp: "المصطلح الفني: مع العقارب (-) وعكس العقارب (+)." },
+        { q: "مجموعة من القوى تلتقي خطوط عملها جميعاً في نقطة واحدة تسمى قوى:", opts: ["متوازية", "متلاقية", "متباعدة"], ans: 1, exp: "صحيح، القوى المتلاقية تُحلل وتُجمع هندسياً من نقطة الالتقاء." },
+        { q: "تحليل القوة المائلة يهدف لاستبدالها بـ:", opts: ["قوة واحدة أكبر", "مركبتين متعامدتين (أفقية ورأسية)", "عزم دوراني فقط"], ans: 1, exp: "نحللها إلى ق جتا هـ (أفقية) و ق جا هـ (رأسية)." }
     ];
 
     let current = 0, score = 0;
 
     const svgs = {
-        balance: `<svg viewBox="0 0 200 100" width="100%" height="100%"><line x1="100" y1="50" x2="40" y2="50" stroke="red" stroke-width="4" marker-end="url(#arr)"/><line x1="100" y1="50" x2="160" y2="50" stroke="blue" stroke-width="4" marker-end="url(#arr)"/><circle cx="100" cy="50" r="6" fill="#1e293b"/><text x="30" y="40" fill="red">10N</text><text x="145" y="40" fill="blue">10N</text><defs><marker id="arr" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="context-stroke" /></marker></defs></svg>`
+        vector: `<svg viewBox="0 0 200 120" width="180"><line x1="20" y1="100" x2="160" y2="100" stroke="#94a3b8" stroke-width="2"/><line x1="20" y1="100" x2="130" y2="30" stroke="#1e293b" stroke-width="5" marker-end="url(#arrow)"/><path d="M50,100 A30,30 0 0,0 45,80" fill="none" stroke="red" stroke-width="2"/><text x="140" y="40" font-weight="bold" fill="#1e293b">ق = 50 ن</text><text x="55" y="90" fill="red">60°</text><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1e293b"/></marker></defs></svg>`
     };
 
     function loadQuestion() {
         const q = questions[current];
-        document.getElementById('q-text').innerText = `سؤال ${current + 1}: ${q.q}`;
+        document.getElementById('q-text').innerText = `س ${current + 1}: ${q.q}`;
         const optContainer = document.getElementById('q-options');
         optContainer.innerHTML = '';
         
-        const visual = document.getElementById('visual-aid');
-        if(q.svg) { visual.style.display = 'flex'; visual.innerHTML = svgs[q.svg]; }
-        else { visual.style.display = 'none'; }
+        const imgArea = document.getElementById('image-area');
+        if(q.svg) { imgArea.style.display = 'flex'; imgArea.innerHTML = svgs[q.svg]; }
+        else { imgArea.style.display = 'none'; }
         
         q.opts.forEach((o, i) => {
             const btn = document.createElement('button');
-            btn.className = 'option-btn';
+            btn.className = 'opt-btn';
             btn.innerText = o;
-            btn.onclick = () => checkAnswer(i);
+            btn.onclick = () => check(i);
             optContainer.appendChild(btn);
         });
 
         document.getElementById('feedback').style.display = 'none';
-        document.getElementById('next-btn').style.display = 'none';
-        document.getElementById('progress').style.width = (current / questions.length * 100) + '%';
+        document.getElementById('action-btn').style.display = 'none';
+        document.getElementById('progress-bar').style.width = (current / questions.length * 100) + '%';
     }
 
-    function checkAnswer(idx) {
+    function check(idx) {
         const q = questions[current];
         const fb = document.getElementById('feedback');
         fb.style.display = 'block';
         if(idx === q.ans) {
             score++; fb.className = 'feedback correct';
-            fb.innerText = "✅ " + q.exp;
+            fb.innerText = "✅ إجابة صحيحة.. " + q.exp;
         } else {
             fb.className = 'feedback wrong';
             fb.innerText = "❌ انتبهوا أيها المتدربون.. " + q.exp;
         }
-        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-        document.getElementById('next-btn').style.display = 'block';
+        document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+        document.getElementById('action-btn').style.display = 'block';
     }
 
-    function nextQuestion() {
+    function handleNext() {
         current++;
         if(current < questions.length) loadQuestion();
-        else {
-            document.getElementById('quiz-content').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'block';
-            document.getElementById('score-text').innerText = `النتيجة: ${score} من 15`;
-        }
+        else showResults();
     }
 
-    // منع الاختصارات للحماية
-    document.onkeydown = (e) => {
-        if(e.ctrlKey && (e.key === 'u' || e.key === 'c' || e.key === 's')) return false;
-        if(e.keyCode == 123) return false;
-    };
+    function showResults() {
+        document.getElementById('quiz-ui').style.display = 'none';
+        document.getElementById('result-ui').style.display = 'block';
+        document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
+    }
+
+    // منع فتح السورس كود
+    document.addEventListener('keydown', (e) => {
+        if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) e.preventDefault();
+    });
 
     loadQuestion();
 </script>
 </body>
 </html>
+
